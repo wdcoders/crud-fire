@@ -20,7 +20,7 @@
               <label>Product Price</label>
               <input type="text" class="form-control" id="price" #price placeholder="Product Price">
             </div>
-            <button type="button" (click)="onAddProduct(id, name, price)" class="btn btn-primary">Add Product</button>
+            <button type="button" (click)="onAddProduct(id, name, price)" class="btn btn-primary">{{(editMode)? 'Update Product': 'Add Product'}}</button>
             <button type="button" (click)="onSaveProduct()" class="btn btn-warning mx-2">Save Product</button>
             <button type="button" (click)="onFetchProduct()" class="btn btn-success">Fetch Product</button>
           </form>
@@ -28,6 +28,7 @@
       </div>
     </div>
     <div class="col-lg-7">
+      <h4>{{dataTitle | async}}</h4>
       <table class="table">
         <thead>
           <tr>
@@ -35,21 +36,30 @@
             <th scope="col">PRODUCT ID</th>
             <th scope="col">PRODUCT NAME</th>
             <th scope="col">PRODUCT PRICE</th>
+            <th scope="col">EDIT</th>
             <th scope="col">DELETE</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody *ngIf="!fetching">
           <tr *ngFor="let p of products; index as i">
             <th>{{i+1}}</th>
             <td>{{p.id}}</td>
             <td>{{p.name}}</td>
             <td>{{p.price}}</td>
             <td>
+              <button (click)="onEditProduct(i)" class="btn btn-success btn-sm"><i class="fas fa-edit"></i></button>
+            </td>
+            <td>
               <button (click)="onDeleteProduct(i)" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
             </td>
           </tr>
         </tbody>
-      </table>      
+      </table>  
+      <div class="d-flex align-items-center justify-content-center" *ngIf="fetching">
+        <div class="spinner-border text-primary mr-2" role="status">
+          <span class="sr-only">Loading...</span>
+        </div> Fetching Products...          
+      </div>    
     </div>
   </div>
 </div>
